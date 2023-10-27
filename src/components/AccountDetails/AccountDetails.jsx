@@ -80,7 +80,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     console.log('Referred By: ', address);
     console.log('Bonus Amount: ', amount);
 
-    const { abi } = require('../abis/PepeToken.json');
+    const { abi } = require('../../abis/PepeToken.json');
 
     const account = accounts[0];
     const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
