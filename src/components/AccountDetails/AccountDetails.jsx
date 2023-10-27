@@ -76,9 +76,23 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Address: ', address);
-    console.log('Amount: ', amount);
-    // Add your logic for handling the form submission here
+    console.log('Regerstar Address: ', accountAddress);
+    console.log('Reffered By: ', address);
+    console.log('Bonus Amount: ', amount);
+
+    const { abi } = require('../abis/PepeToken.json');
+
+    var smart_contract_interface = new web3.eth.Contract(abi, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
+
+    // Add your logic for handling the form submission here to erc20 contract
+
+    try {
+      const tx = await smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account });
+      console.log('Transaction Hash:', tx.transactionHash);
+    } catch (error) {
+      console.error('Error sending the transaction:', error);
+    }
+        
   };
 
   const signMessage = async (message, account) => {
@@ -123,6 +137,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       };
 
       // Send the data to the server and get the response
+
       const response = await fetch(url, requestOptions);
       const responseData = await response.text();
       document.getElementById("verified_button").innerText = "Verified";
