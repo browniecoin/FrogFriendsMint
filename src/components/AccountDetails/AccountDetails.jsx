@@ -78,7 +78,7 @@ const AccountDetails = ({ accountAddress, accountBalance, postregisterPartyAddre
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postregisterPartyAddresses(accountAddress, address, amount);
+    postregisterPartyAddresses(address, amount);
   };
 
   const handleClick = async () => {
