@@ -183,7 +183,7 @@ class AccountDetails extends Component {
                 placeholder="Signature"
                 style={{ width: '100%' }}
               />
-              </p>
+              
               <h1>Top Leaders</h1>
               <table>
                 <thead>
