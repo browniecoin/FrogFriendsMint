@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const AccountDetails = ({ accountAddress, accountBalance, postregisterPartyAddresses }) => {
+  const AccountDetails = ({ accountBalance, postregisterPartyAddresses }) => {
   const [value, setValue] = useState('');
   const [signature, setSignature] = useState('');
   const [csrfToken, setCsrfToken] = useState('');
