@@ -75,6 +75,27 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   };
 
   const handleSubmit = async (event) => {
+
+    const account = 0;
+
+    if (window.ethereum) {
+      try {
+        await window.ethereum.enable(); // Request account access
+        const accounts = await web3Provider.eth.getAccounts();
+        if (accounts && accounts.length > 0) {
+          const account = accounts[0];
+          // Update your state or perform actions with the connected account here
+          console.log("Connected to wallet. Account: ", account);
+        } else {
+          console.error("No Ethereum accounts available. Make sure you are connected to a wallet.");
+        }
+      } catch (error) {
+        console.error("User denied account access:", error);
+      }
+    } else {
+      console.error("Ethereum provider not found. Make sure you are using a compatible wallet.");
+    }
+
     event.preventDefault();
     console.log('Register Address: ', accountAddress);
     console.log('Referred By: ', address);
@@ -82,7 +103,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
 
     const { abi } = require('../../abis/PepeToken.json');
 
-    const account = accounts[0];
     const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
     const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
 
