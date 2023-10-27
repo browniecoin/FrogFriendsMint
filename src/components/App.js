@@ -130,9 +130,9 @@ class App extends Component {
 //        if (networkData) {
           this.setState({ loading: true });
 
-          const { abi } = require('../abis/DigitalDon.json');
+          const { abi } = require('../abis/FrogFriends.json');
 
-          var smart_contract_interface = new web3.eth.Contract(abi, '0x834f89360322c3a4EC13E1d4d38DD684dCCf99ff')
+          var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
           const cryptoBoysContract = smart_contract_interface;
@@ -246,23 +246,30 @@ offerPunkForSale = async (punkIndex, punkPrice) => {
       });
 };
 claimPunk = async (punkIndex) => {
+  this.setState({ loading: true });
 
-  let totalSupply = await this.state.cryptoBoysContract.methods
-    .totalSupply()
-    .call();
+  const cryptoBoysContract = this.state.cryptoBoysContract;
+  const accountAddress = this.state.accountAddress;
+  const hardcodedAmount = 0.001;
 
+  try {
+    const totalSupply = await cryptoBoysContract.methods.totalSupply().call();
+    const mintAmount = hardcodedAmount * punkIndex;
 
-    this.setState({ loading: true });
-      this.state.cryptoBoysContract.methods
-        .mint(punkIndex)
-        .send({ from: this.state.accountAddress})
-        .on("confirmation", () => {
-          localStorage.setItem(this.state.accountAddress, new Date().getTime());
-          this.setState({ loading: false });
-          window.location.reload();
-        });
-
+    await cryptoBoysContract.methods
+      .publicSaleMint(punkIndex)
+      .send({ from: accountAddress, value: web3.utils.toWei(String(mintAmount), 'ether') })
+      .on("confirmation", () => {
+        localStorage.setItem(accountAddress, new Date().getTime());
+        this.setState({ loading: false });
+        window.location.reload();
+      });
+  } catch (error) {
+    console.error("Error claiming punk:", error);
+    this.setState({ loading: false });
+  }
 };
+
 
 
 buyPunk = async (punkIndex, punkPrice) => {
