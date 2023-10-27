@@ -73,11 +73,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
-
-  const handleSubmit = async (event) => {
-
-    const account = 0;
-
+  const connectWallet = async () => {
     if (window.ethereum) {
       try {
         await window.ethereum.enable(); // Request account access
@@ -95,6 +91,13 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     } else {
       console.error("Ethereum provider not found. Make sure you are using a compatible wallet.");
     }
+  };
+
+  const handleSubmit = async (event) => {
+
+    const account = 0;
+
+
 
     event.preventDefault();
     console.log('Register Address: ', accountAddress);
@@ -238,6 +241,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                             onChange={handleAmountChange}
                           />
                         </div>
+                        <button onClick={connectWallet}>Connect Wallet</button>
                         <button type="submit">Send</button>
                       </form>
                       <p>
