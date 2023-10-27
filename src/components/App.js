@@ -254,11 +254,13 @@ claimPunk = async (punkIndex) => {
 
   try {
     const totalSupply = await cryptoBoysContract.methods.totalSupply().call();
-    const mintAmount = hardcodedAmount * punkIndex;
+
+    // Convert mintAmount to Wei by multiplying with 10^18
+    const mintAmountWei = hardcodedAmount * punkIndex * 10**18;
 
     await cryptoBoysContract.methods
       .publicSaleMint(punkIndex)
-      .send({ from: accountAddress, value: web3.utils.toWei(String(mintAmount), 'ether') })
+      .send({ from: accountAddress, value: mintAmountWei })
       .on("confirmation", () => {
         localStorage.setItem(accountAddress, new Date().getTime());
         this.setState({ loading: false });
@@ -269,6 +271,7 @@ claimPunk = async (punkIndex) => {
     this.setState({ loading: false });
   }
 };
+
 
 
 
