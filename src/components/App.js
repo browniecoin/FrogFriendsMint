@@ -345,7 +345,7 @@ getPunkOwner = async (punkIndex) => {
                   <AccountDetails
                     accountAddress={this.state.accountAddress}
                     accountBalance={this.state.accountBalance}
-                    postregisterPartyAddresses={this.state.postregisterPartyAddresses}
+                    postregisterPartyAddresses={this.postregisterPartyAddresses}
 
                   />
                 )}
