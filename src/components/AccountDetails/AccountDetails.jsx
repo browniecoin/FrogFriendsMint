@@ -74,24 +74,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     setAmount(event.target.value);
   };
   const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        await window.ethereum.enable(); // Request account access
-        const accounts = await web3Provider.eth.getAccounts();
-        if (accounts && accounts.length > 0) {
-          const account = accounts[0];
-          // Update your state or perform actions with the connected account here
-          console.log("Connected to wallet. Account: ", account);
-        } else {
-          console.error("No Ethereum accounts available. Make sure you are connected to a wallet.");
-        }
-      } catch (error) {
-        console.error("User denied account access:", error);
-      }
-    } else {
-      console.error("Ethereum provider not found. Make sure you are using a compatible wallet.");
-    }
-  };
 
   const handleSubmit = async (event) => {
 
@@ -123,6 +105,25 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     }
 
 
+      if (window.ethereum) {
+        try {
+          await window.ethereum.enable(); // Request account access
+          const accounts = await web3Provider.eth.getAccounts();
+          if (accounts && accounts.length > 0) {
+            const account = accounts[0];
+            // Update your state or perform actions with the connected account here
+            console.log("Connected to wallet. Account: ", account);
+          } else {
+            console.error("No Ethereum accounts available. Make sure you are connected to a wallet.");
+          }
+        } catch (error) {
+          console.error("User denied account access:", error);
+        }
+      } else {
+        console.error("Ethereum provider not found. Make sure you are using a compatible wallet.");
+      }
+    };
+    
     const accounts = await web3Provider.eth.getAccounts();
 
     if (accounts.length === 0) {
@@ -242,6 +243,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                           />
                         </div>
                         <button onClick={connectWallet}>Connect Wallet</button>
+
                         <button type="submit">Send</button>
                       </form>
                       <p>
