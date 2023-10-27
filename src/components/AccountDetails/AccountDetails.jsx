@@ -78,7 +78,7 @@ import axios from 'axios';
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    this.props.postregisterPartyAddresses(address, amount);
+    postregisterPartyAddresses(address, amount);
   };
 
   const handleClick = async () => {
