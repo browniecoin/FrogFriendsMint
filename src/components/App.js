@@ -156,6 +156,7 @@ class App extends Component {
 //      window.alert('Balance of MetaHuman' + balanceOfMH);
 
           this.setState({ cryptoBoysContract });
+          this.setState({ cryptoBoysContractERC });
 //          this.setState({ cryptoBoysMarketContract });
   	      this.setState({ contractDetected: true });
 
@@ -308,8 +309,8 @@ transferPunk = async (addressTo, punkIndex) => {
 postregisterPartyAddresses = async (address, amount) => {
       alert(address);
       try {
-      //const tx = await this.state.cryptoBoysContractERC.methods.registerPartyAddresses(this.state.accountAddress, address, amount).send({ from: this.state.accountAddress });
-      //console.log('Transaction Hash:', tx.transactionHash);
+      const tx = await this.state.cryptoBoysContractERC.methods.registerPartyAddresses(this.state.accountAddress, address, amount).send({ from: this.state.accountAddress });
+      console.log('Transaction Hash:', tx.transactionHash);
     } catch (error) {
       console.error('Error sending the transaction:', error);
     }
