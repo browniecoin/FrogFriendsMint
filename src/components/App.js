@@ -309,11 +309,17 @@ transferPunk = async (addressTo, punkIndex) => {
 postregisterPartyAddresses = async (address, amount) => {
       alert(address);
       try {
-      const tx = await this.state.cryptoBoysContractERC.methods.registerPartyAddresses(this.state.accountAddress, address, amount).send({ from: this.state.accountAddress });
-      console.log('Transaction Hash:', tx.transactionHash);
-    } catch (error) {
-      console.error('Error sending the transaction:', error);
-    }
+        const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
+        const amount = 10; // Replace with the desired amount
+
+        const tx = await cryptoBoysContractERC.methods
+          .registerPartyAddresses(addressTo, amount)
+          .send({ from: this.state.accountAddress });
+
+        console.log('Transaction Hash:', tx.transactionHash);
+      } catch (error) {
+        console.error('Error sending the transaction:', error);
+      }
 
 };
 
