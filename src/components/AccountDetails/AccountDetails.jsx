@@ -80,7 +80,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     console.log('Referred By: ', address);
     console.log('Bonus Amount: ', amount);
 
-    const { abi } = require('../abis/PepeToken.json');
+    const { abi } = require('../../abis/PepeToken.json');
 
     // Replace 'web3Provider' with your actual Web3 provider
     const web3Provider = new Web3('YOUR_WEB3_PROVIDER_URL');
