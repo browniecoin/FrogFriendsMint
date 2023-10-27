@@ -74,41 +74,67 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     setAmount(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('Register Address: ', accountAddress);
     console.log('Referred By: ', address);
     console.log('Bonus Amount: ', amount);
 
-    const { abi } = require('../../abis/PepeToken.json');
+    const { abi } = require('../abis/PepeToken.json');
+
+    // Call loadWeb3 to ensure Web3 is properly loaded
+    await loadWeb3();
+
+    // Now you can proceed with interacting with the smart contract
 
     // Replace 'web3Provider' with your actual Web3 provider
-    const web3Provider = new Web3('YOUR_WEB3_PROVIDER_URL');
+    const web3Provider = window.web3;
 
-    // Connect to the Ethereum network
-    web3Provider.eth.net.isListening()
-      .then(() => {
-        const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
+    if (!web3Provider) {
+      console.error("Web3 is not available. You should consider using a browser with MetaMask or a compatible wallet.");
+      return;
+    }
 
-        const account = web3Provider.eth.accounts[0]; // Assuming you have unlocked an account
+    const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
 
-        const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
+    const accounts = await web3Provider.eth.getAccounts();
 
-        // Add your logic for handling the form submission here
-        // You can call the 'registerPartyAddresses' method here
+    if (accounts.length === 0) {
+      console.error("No Ethereum accounts available. Make sure you are connected to a wallet.");
+      return;
+    }
 
-        smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account })
-          .on('transactionHash', function (hash) {
-            console.log('Transaction Hash:', hash);
-          })
-          .on('error', function (error) {
-            console.error('Error sending the transaction:', error);
-          });
-      })
-      .catch(error => {
-        console.error('Web3 connection error:', error);
-      });
+    const account = accounts[0];
+
+    const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
+
+    // Add your logic for handling the form submission here
+    // You can call the 'registerPartyAddresses' method here
+
+    try {
+      const tx = await smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account });
+      console.log('Transaction Hash:', tx.transactionHash);
+    } catch (error) {
+      console.error('Error sending the transaction:', error);
+    }
   };
+
+  const loadWeb3 = async () => {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+      } catch (error) {
+        console.error("User denied account access:", error);
+      }
+    } else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+    } else {
+      console.error("Non-Ethereum browser detected. You should consider trying MetaMask or another Ethereum-compatible wallet.");
+    }
+  };
+
 
 
   const signMessage = async (message, account) => {
