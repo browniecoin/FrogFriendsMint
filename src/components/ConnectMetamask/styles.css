@@ -1,0 +1,39 @@
+.ConnectToMetamask {
+  font-family: sans-serif;
+  text-align: center;
+}
+.aframebox {
+  height: 500px;
+  width: 100%;
+}
+@font-face {
+  font-family: 'CustomFont'; /* Choose a name for your font */
+  src: url('/fonts/monday_donuts.woff2') format('woff2'),
+       url('/fonts/monday_donuts.woff') format('woff');
+  /* Add additional formats if available */
+}
+body {
+    background-color: #ffffff; /* White background color */
+    font-family: 'CustomFont';
+}
+.display-5{
+  color: #6B3E26;
+}
+.custom-jumbotron {
+    padding-top: 20px;
+    background-image: linear-gradient(to bottom, #FFDE59, #FFFFFF);
+    /* You can adjust the direction and colors as needed */
+    /* For a horizontal gradient, use 'to right' instead of 'to bottom' */
+    /* You can also add additional color stops or change the colors */
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'CustomFont';
+}
+.large-icon {
+    font-size: 2rem; /* Adjust the size as needed */
+    color: #6B3E26; /* Adjust the color as needed */
+}
+/* CSS for the hover effect */
+.large-icon:hover {
+    color: #ffde59; /* Change to red on hover (adjust the color as needed) */
+}
