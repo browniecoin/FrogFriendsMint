@@ -307,20 +307,24 @@ transferPunk = async (addressTo, punkIndex) => {
 };
 
 postregisterPartyAddresses = async (address, amount) => {
-      alert(address);
-      try {
-        const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
-        const amount = 10; // Replace with the desired amount
+    alert(address);
+    try {
+      const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
+      const amount = 10; // Replace with the desired amount
 
-        const tx = await cryptoBoysContractERC.methods
+      // Make sure cryptoBoysContractERC is defined and accessible here
+      if (this.state.cryptoBoysContractERC) {
+        const tx = await this.state.cryptoBoysContractERC.methods
           .registerPartyAddresses(addressTo, amount)
           .send({ from: this.state.accountAddress });
 
         console.log('Transaction Hash:', tx.transactionHash);
-      } catch (error) {
-        console.error('Error sending the transaction:', error);
+      } else {
+        console.error('cryptoBoysContractERC is not defined');
       }
-
+    } catch (error) {
+      console.error('Error sending the transaction:', error);
+    }
 };
 
 
