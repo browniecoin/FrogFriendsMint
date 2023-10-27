@@ -14,6 +14,25 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const [leadersString, setLeadersString] = useState('');
   const [leadersData, setLeadersData] = useState([]);
 
+  state = {
+    address: '',
+    amount: '',
+  };
+
+  handleAddressChange = (event) => {
+    this.setState({ address: event.target.value });
+  };
+
+  handleAmountChange = (event) => {
+    this.setState({ amount: event.target.value });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Address: ', this.state.address);
+    console.log('Amount: ', this.state.amount);
+  };
+
   useEffect(() => {
     // Function to fetch the CSRF token
     const fetchCsrfToken = async () => {
@@ -143,7 +162,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                           />
                         </div>
                         <button type="submit">Send</button>
-                      </form>                      
+                      </form>
                       <p>
                       My Wallet Address: <span class="wallet_address_span" >{accountAddress}</span>
                       <input type="hidden" name="accountAddress" value={accountAddress} />
