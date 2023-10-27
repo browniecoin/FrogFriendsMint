@@ -27,9 +27,6 @@ const ConnectToMetamask = ({ connectToMetamask }) => {
         Mint
       </button>
         </h1>
-        <h3 className="display-5 p-4 text-center">
-          PEPE the Frog Friends
-        </h3>
 
         <img src="images/ff.gif" width="100%" />
 
