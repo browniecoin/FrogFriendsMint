@@ -142,21 +142,21 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                       <p>
                       <a href={`/home/my_profile/`}>My Profile</a>
                       </p>
-                      <form onSubmit={this.handleSubmit}>
+                      <form onSubmit={handleSubmit}>
                         <div>
                           <label>Recipient Address:</label>
                           <input
                             type="text"
-                            value={this.state.address}
-                            onChange={this.handleAddressChange}
+                            value={address}
+                            onChange={handleAddressChange}
                           />
                         </div>
                         <div>
                           <label>Amount to Send:</label>
                           <input
                             type="number"
-                            value={this.state.amount}
-                            onChange={this.handleAmountChange}
+                            value={amount}
+                            onChange={handleAmountChange}
                           />
                         </div>
                         <button type="submit">Send</button>
