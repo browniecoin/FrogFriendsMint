@@ -21,6 +21,7 @@ import {Contract} from "@ethersproject/contracts";
 
 import {useLocation} from "react-router-dom";
 
+import Web3 from 'web3';
 
 import db  from "../database";
 
