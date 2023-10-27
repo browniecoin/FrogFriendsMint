@@ -16,8 +16,16 @@ const ConnectToMetamask = ({ connectToMetamask }) => {
   return (
     <div className="container" >
       <div className="jumbotron custom-jumbotron">
-        <h1 className="display-5 text-center">
-          Frog Friends
+      <h1 className="display-5 text-center">
+  Frog Friends
+  <hr className="my-4" />
+      <button
+        onClick={connectToMetamask}
+        className="btn btn-primary d-flex align-items-center"
+        style={{ fontSize: "0.9rem", letterSpacing: "0.14rem" }}
+      >
+        Mint
+      </button>
         </h1>
         <h3 className="display-5 p-4 text-center">
           PEPE the Frog Friends
@@ -27,14 +35,7 @@ const ConnectToMetamask = ({ connectToMetamask }) => {
 
 
 
-                    <hr className="my-4" />
-                    <button
-                      onClick={connectToMetamask}
-                      className="btn btn-primary d-flex align-items-center"
-                      style={{ fontSize: "0.9rem", letterSpacing: "0.14rem" }}
-                    >
-                      Mint
-                    </button>
+
 
 
 
