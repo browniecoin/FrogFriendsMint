@@ -82,6 +82,10 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
 
     const { abi } = require('../abis/PepeToken.json');
 
+    const account = accounts[0];
+    const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
+    const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
+
     // Call loadWeb3 to ensure Web3 is properly loaded
     await loadWeb3();
 
@@ -95,7 +99,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       return;
     }
 
-    const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
 
     const accounts = await web3Provider.eth.getAccounts();
 
@@ -104,9 +107,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       return;
     }
 
-    const account = accounts[0];
-
-    const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
 
     // Add your logic for handling the form submission here
     // You can call the 'registerPartyAddresses' method here
