@@ -13,10 +13,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const [walletLeaders, setWalletLeaders] = useState(null);
   const [leadersString, setLeadersString] = useState('');
   const [leadersData, setLeadersData] = useState([]);
-  const [address, setAddress] = useState('');
-  const [amount, setAmount] = useState('');
-
-
 
   useEffect(() => {
     // Function to fetch the CSRF token
@@ -66,27 +62,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
 
   }, []);
 
-  const handleAddressChange = (event) => {
-    setAddress(event.target.value);
-  };
-
-  const handleAmountChange = (event) => {
-    setAmount(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('Regerst: ', accountAddress);
-    console.log('Address: ', address);
-    console.log('Amount: ', amount);
-
-    const { abi } = require('../abis/PepeToken.json');
-
-    var smart_contract_interface = new web3.eth.Contract(abi, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
-
-    // Add your logic for handling the form submission here
-  };
-
   const signMessage = async (message, account) => {
     try {
       const web3 = new Web3(window.ethereum);
@@ -129,7 +104,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       };
 
       // Send the data to the server and get the response
-
       const response = await fetch(url, requestOptions);
       const responseData = await response.text();
       document.getElementById("verified_button").innerText = "Verified";
@@ -151,25 +125,6 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                       <p>
                       <a href={`/home/my_profile/`}>My Profile</a>
                       </p>
-                      <form onSubmit={handleSubmit}>
-                        <div>
-                          <label>Recipient Address:</label>
-                          <input
-                            type="text"
-                            value={address}
-                            onChange={handleAddressChange}
-                          />
-                        </div>
-                        <div>
-                          <label>Amount to Send:</label>
-                          <input
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountChange}
-                          />
-                        </div>
-                        <button type="submit">Send</button>
-                      </form>
                       <p>
                       My Wallet Address: <span class="wallet_address_span" >{accountAddress}</span>
                       <input type="hidden" name="accountAddress" value={accountAddress} />
