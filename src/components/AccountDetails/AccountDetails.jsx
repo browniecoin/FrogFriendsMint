@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const AccountDetails = ({ accountAddress, accountBalance }) => {
+const AccountDetails = ({ accountAddress, accountBalance, postregisterPartyAddresses }) => {
   const [value, setValue] = useState('');
   const [signature, setSignature] = useState('');
   const [csrfToken, setCsrfToken] = useState('');
@@ -13,6 +13,9 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const [walletLeaders, setWalletLeaders] = useState(null);
   const [leadersString, setLeadersString] = useState('');
   const [leadersData, setLeadersData] = useState([]);
+  const [accountAddress, setAccountAddress] = useState('');
+  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState('');
 
   useEffect(() => {
     // Function to fetch the CSRF token
@@ -73,6 +76,11 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    postregisterPartyAddresses(accountAddress, address, amount);
+  };
+
   const handleClick = async () => {
     try {
       const web3 = new Web3(window.ethereum);
@@ -104,9 +112,14 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       };
 
       // Send the data to the server and get the response
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.text();
-      document.getElementById("verified_button").innerText = "Verified";
+      //const response = await fetch(url, requestOptions);
+      ///const responseData = await response.text();
+      ///document.getElementById("verified_button").innerText = "Verified";
+
+
+      this.props.claimPunk(
+        this.state.punkid
+      );
     } catch (error) {
       console.error('Error handling click event:', error);
     }
@@ -125,6 +138,34 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
                       <p>
                       <a href={`/home/my_profile/`}>My Profile</a>
                       </p>
+                      <h2>Register Party Addresses</h2>
+                      <form onSubmit={handleSubmit}>
+                        <div>
+                          <label>Account Address:</label>
+                          <input
+                            type="text"
+                            value={accountAddress}
+                            onChange={(e) => setAccountAddress(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label>Address:</label>
+                          <input
+                            type="text"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label>Amount:</label>
+                          <input
+                            type="text"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                          />
+                        </div>
+                        <button type="submit">Register</button>
+                      </form>
                       <p>
                       My Wallet Address: <span class="wallet_address_span" >{accountAddress}</span>
                       <input type="hidden" name="accountAddress" value={accountAddress} />

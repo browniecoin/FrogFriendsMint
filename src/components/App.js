@@ -135,6 +135,10 @@ class App extends Component {
           var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
+          const { abierc } = require('../abis/PepeToken.json');
+
+          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
+
           const cryptoBoysContract = smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
@@ -298,63 +302,21 @@ transferPunk = async (addressTo, punkIndex) => {
         window.location.reload();
       });
 };
-loadMorePunks = async () => {
-  let incAmt = 8000;
-  for (let i = this.state.cryptoPunksLoadCount; i < this.state.cryptoPunksLoadCount + incAmt && i < 8000; i++) {
-    let punkOwner = await this.state.cryptoBoysContract.methods
-      .ownerOf(i)
-      .call();
-    this.state.cryptoBoys.push(punkOwner);
-    this.forceUpdate();
-  }
-  this.state.cryptoPunksLoadCount += incAmt;
-};
 
-loadMorePunks = async (from, to) => {
-  for (let i = from; i < to; i++) {
-    let punkOwner = await this.state.cryptoBoysContract.methods
-      .ownerOf(i)
-      .call();
-    this.state.cryptoBoys[i]=punkOwner;
-  }
-  this.forceUpdate();
-};
-
-loadPunksForSale = async () => {
-
-//  const mintBtn = document.getElementById("mintBtn25");
-//  mintBtn.disabled = true;
-  for (let i = this.state.cryptoPunksBuyLoadCount; i < 10000; i++) {
-    this.state.punksforsalebuttonhtml = "Loading " + i + " of 9999";
-    let punkOwner = await this.state.cryptoBoysContract.methods
-      .punksOfferedForSale(i)
-      .call();
-      const price = window.web3.utils.fromWei(punkOwner.minValue +'', "Ether");
-        this.state.cryptoBoysForSale[i]=price;
-        this.forceUpdate();
-      this.state.cryptoPunksBuyLoadCount += 1;
-  }
-  this.state.punksforsalebuttonhtml = "Done Loading";
+postregisterPartyAddresses = async (accountAddress, address, amount) => {
+    accountAddress = accountAddress;
+    address =address
+    amount = amount
+    try {
+      const tx = await smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account });
+      console.log('Transaction Hash:', tx.transactionHash);
+    } catch (error) {
+      console.error('Error sending the transaction:', error);
+    }
 
 };
 
-loadPunksForSale = async (from, to) => {
 
-//  const mintBtn = document.getElementById("mintBtn25");
-//  mintBtn.disabled = true;
-  for (let i = from; i < to; i++) {
-    let punkOwner = await this.state.cryptoBoysContract.methods
-      .punksOfferedForSale(i)
-      .call();
-      const price = window.web3.utils.fromWei(punkOwner.minValue +'', "Ether");
-      if(price != 0x00){
-        this.state.cryptoBoysForSale[i]=price;
-        this.forceUpdate();
-      }
-  }
-  this.forceUpdate();
-
-};
 getPunkOwner = async (punkIndex) => {
     let punkOwner = await this.state.cryptoBoysContract.methods
       .punkIndexToAddress(punkIndex)
