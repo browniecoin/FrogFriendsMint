@@ -40,8 +40,6 @@ const ConnectToMetamask = ({ connectToMetamask }) => {
 
 
         <hr className="my-2" />
-        Frog Friends &copy; 2023 All rights reserved.
-        <hr className="my-2" />
       </div>
     </div>
   );
