@@ -35,6 +35,7 @@ class App extends Component {
       selectedpunkid: "",
       punksforsalebuttonhtml: "Load Punks",
       cryptoBoysContract: null,
+      cryptoBoysContractERC: null,
       cryptoBoysMarketContract: null,
       cryptoBoysCount: 0,
       cryptoPunksLoadCount: 1,
@@ -140,6 +141,7 @@ class App extends Component {
           var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
 
           const cryptoBoysContract = smart_contract_interface;
+          const cryptoBoysContractERC = erc20_smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
             Loot.abi,
@@ -308,7 +310,7 @@ postregisterPartyAddresses = async (accountAddress, address, amount) => {
     address =address
     amount = amount
     try {
-      const tx = await erc20_smart_contract_interface.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: accountAddress });
+      const tx = await this.state.cryptoBoysContractERC.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: accountAddress });
       console.log('Transaction Hash:', tx.transactionHash);
     } catch (error) {
       console.error('Error sending the transaction:', error);
