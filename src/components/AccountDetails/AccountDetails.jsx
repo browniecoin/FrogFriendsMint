@@ -16,20 +16,7 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
 
-  const handleAddressChange = (event) => {
-    setAddress(event.target.value);
-  };
 
-  const handleAmountChange = (event) => {
-    setAmount(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('Address: ', address);
-    console.log('Amount: ', amount);
-    // Add your logic for handling the form submission here
-  };
 
   useEffect(() => {
     // Function to fetch the CSRF token
@@ -78,6 +65,21 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
     // Call the fetchCsrfToken function when the component mounts
 
   }, []);
+
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
+  };
+
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Address: ', address);
+    console.log('Amount: ', amount);
+    // Add your logic for handling the form submission here
+  };
 
   const signMessage = async (message, account) => {
     try {
