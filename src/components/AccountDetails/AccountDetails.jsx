@@ -76,24 +76,40 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Regerstar Address: ', accountAddress);
-    console.log('Reffered By: ', address);
+    console.log('Register Address: ', accountAddress);
+    console.log('Referred By: ', address);
     console.log('Bonus Amount: ', amount);
 
     const { abi } = require('../abis/PepeToken.json');
 
-    var smart_contract_interface = new web3.eth.Contract(abi, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
+    // Replace 'web3Provider' with your actual Web3 provider
+    const web3Provider = new Web3('YOUR_WEB3_PROVIDER_URL');
 
-    // Add your logic for handling the form submission here to erc20 contract
+    // Connect to the Ethereum network
+    web3Provider.eth.net.isListening()
+      .then(() => {
+        const contractAddress = '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73';
 
-    try {
-      const tx = await smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account });
-      console.log('Transaction Hash:', tx.transactionHash);
-    } catch (error) {
-      console.error('Error sending the transaction:', error);
-    }
-        
+        const account = web3Provider.eth.accounts[0]; // Assuming you have unlocked an account
+
+        const smartContract = new web3Provider.eth.Contract(abi, contractAddress);
+
+        // Add your logic for handling the form submission here
+        // You can call the 'registerPartyAddresses' method here
+
+        smartContract.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account })
+          .on('transactionHash', function (hash) {
+            console.log('Transaction Hash:', hash);
+          })
+          .on('error', function (error) {
+            console.error('Error sending the transaction:', error);
+          });
+      })
+      .catch(error => {
+        console.error('Web3 connection error:', error);
+      });
   };
+
 
   const signMessage = async (message, account) => {
     try {
