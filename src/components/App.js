@@ -308,7 +308,7 @@ postregisterPartyAddresses = async (accountAddress, address, amount) => {
     address =address
     amount = amount
     try {
-      const tx = await erc20_smart_contract_interface.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: account });
+      const tx = await erc20_smart_contract_interface.methods.registerPartyAddresses(accountAddress, address, amount).send({ from: accountAddress });
       console.log('Transaction Hash:', tx.transactionHash);
     } catch (error) {
       console.error('Error sending the transaction:', error);
