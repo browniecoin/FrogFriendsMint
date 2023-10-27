@@ -13,24 +13,22 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
   const [walletLeaders, setWalletLeaders] = useState(null);
   const [leadersString, setLeadersString] = useState('');
   const [leadersData, setLeadersData] = useState([]);
+  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState('');
 
-  state = {
-    address: '',
-    amount: '',
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
   };
 
-  handleAddressChange = (event) => {
-    this.setState({ address: event.target.value });
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
 
-  handleAmountChange = (event) => {
-    this.setState({ amount: event.target.value });
-  };
-
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Address: ', this.state.address);
-    console.log('Amount: ', this.state.amount);
+    console.log('Address: ', address);
+    console.log('Amount: ', amount);
+    // Add your logic for handling the form submission here
   };
 
   useEffect(() => {
