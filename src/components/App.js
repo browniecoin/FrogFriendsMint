@@ -314,8 +314,7 @@ postregisterPartyAddresses = async (address, amount) => {
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContractERC) {
         const tx = await this.state.cryptoBoysContractERC.methods
-          .registerPartyAddresses(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount)
-          .send({ from: this.state.accountAddress });
+          .registerPartyAddresses(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount);
 
         console.log('Transaction Hash:', tx.transactionHash);
       } else {
