@@ -306,6 +306,7 @@ transferPunk = async (addressTo, punkIndex) => {
 
 postregisterPartyAddresses = async (address, amount) => {
     alert(address);
+    const web3 = window.web3;
     try {
       const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
       const amount = 10; // Replace with the desired amount
