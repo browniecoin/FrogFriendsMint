@@ -132,7 +132,7 @@ class App extends Component {
 
           const { abi } = require('../abis/PEPEToken.json');
 
-          var smart_contract_interface = new web3.eth.Contract(abi, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
+          var smart_contract_interface = new web3.eth.Contract(abi, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
 
 
           const cryptoBoysContract = smart_contract_interface;
