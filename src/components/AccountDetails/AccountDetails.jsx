@@ -131,7 +131,7 @@ class AccountDetails extends Component {
     return (
       <div>
         <div className="jumbotron">
-          <h1 className="display-5">Verify Wallet Address</h1>
+          <h1 className="display-5">PEPE Referral Program for Brownie Coin</h1>
           <div className="card col-md-12">
             <div className="card-body">
               <hr className="my-4" />
