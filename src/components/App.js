@@ -142,7 +142,7 @@ class App extends Component {
 
 
           const cryptoBoysContract = smart_contract_interface;
-          //const cryptoBoysContractERC = erc20_smart_contract_interface;
+          const cryptoBoysContractERC = smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
             Loot.abi,
