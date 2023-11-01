@@ -158,77 +158,7 @@ class AccountDetails extends Component {
                 </div>
                 <button type="submit">Register</button>
               </form>
-              <hr className="my-5" />
-              <p>
-                My Wallet Address: <span className="wallet_address_span">{this.state.accountAddress}</span>
-                <input type="hidden" name="accountAddress" value={this.state.accountAddress} />
-                <input type="hidden" name="csrf_token" value={this.state.csrfToken} />
-              </p>
-              <hr className="my-1" />
-              <button onClick={this.handleClick} id="verified_button">
-                Verify
-              </button>
-              <hr className="my-4" />
-              <input
-                type="hidden"
-                value={this.state.signature}
-                readOnly
-                placeholder="Signature"
-                style={{ width: '100%' }}
-              />
 
-              <h1>Top Leaders</h1>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Owner</th>
-                    <th>Count</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.leadersData.map((leader, index) => (
-                    <tr key={index}>
-                      <td>
-                        <span className="wallet_address_span">{leader.token_owner}</span>
-                      </td>
-                      <td>{leader.token_count}</td>
-                      <td>{leader.balance}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <hr className="my-4" />
-              {this.state.walletHistory && (
-                <div>
-                  <h2>Token Records</h2>
-                  <ul>
-                    {this.state.walletHistory.token_records &&
-                      this.state.walletHistory.token_records.map((record, index) => {
-                        const tokens = record.split(' - ');
-                        const tokenName = tokens[0];
-                        const tokenAddress = tokens[1];
-                        const dateString = tokens[2];
-                        const date = new Date(dateString);
-
-                        // Format the date as needed, for example, in a human-readable format
-                        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-
-                        return (
-                          <li key={index}>
-                            {`${tokenName} - ${tokenAddress} - ${formattedDate}`}
-                          </li>
-                        );
-                      })}
-                  </ul>
-                  <hr className="my-4" />
-                  <h2>Token Balances</h2>
-                  <ul>
-                    {this.state.walletHistory.token_balances &&
-                      this.state.walletHistory.token_balances.map((balance, index) => (
-                        <li key={index}>{balance}</li>
-                      ))}
-                  </ul>
                 </div>
               )}
             </div>
