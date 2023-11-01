@@ -162,11 +162,8 @@ class App extends Component {
   	      this.setState({ contractDetected: true });
 
 
-          const balanceOf = await smart_contract_interface.methods
-            .balanceOf(this.state.accountAddress)
-            .call();
 
-          const balanceOfERC = await erc20_smart_contract_interface.methods
+          const balanceOf = await erc20_smart_contract_interface.methods
             .balanceOf(this.state.accountAddress)
             .call();
 
