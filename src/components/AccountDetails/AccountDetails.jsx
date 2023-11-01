@@ -159,8 +159,6 @@ class AccountDetails extends Component {
                 <button type="submit">Register</button>
               </form>
 
-                </div>
-              )}
             </div>
           </div>
         </div>
