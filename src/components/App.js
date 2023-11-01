@@ -131,18 +131,18 @@ class App extends Component {
 //        if (networkData) {
           this.setState({ loading: true });
 
-          const { abierc } = require('../abis/PEPEToken.json');
+          const { abierc } = require('../abis/PEPE.json');
 
-          var smart_contract_interface = new web3.eth.Contract(abierc, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
+          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
 
-          //const { abi } = require('../abis/FrogFriends.json');
+          const { abi } = require('../abis/FrogFriends.json');
 
-          //var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
+          var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
 
           const cryptoBoysContract = smart_contract_interface;
-          const cryptoBoysContractERC = smart_contract_interface;
+          const cryptoBoysContractERC = erc20_smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
             Loot.abi,
@@ -162,15 +162,23 @@ class App extends Component {
   	      this.setState({ contractDetected: true });
 
 
+          const balanceOf = await smart_contract_interface.methods
+            .balanceOf(this.state.accountAddress)
+            .call();
 
-
+          const totalTokensOwnedByAccount = await smart_contract_interface.methods
+            .totalSupply()
+            .call();
           let punkOwners = [];
           this.state.cryptoBoys = punkOwners;
           this.state.cryptoBoysForSale = [];
-          this.state.balanceOf  =  "";
+          this.state.balanceOf  = balanceOf + "";
           this.state.punksforsalebuttonhtml = "Load Punks";
-          this.state.totalTokensOwnedByAccount = "";
+          this.state.totalTokensOwnedByAccount = totalTokensOwnedByAccount + "";
 
+          for (let i = 0; i < 8000; i++) {
+              this.state.cryptoBoys[i]=0x00;
+          }
 
 //          (async () => {
 //              await this.loadMorePunks(0,8000);
@@ -253,6 +261,7 @@ claimPunk = async (punkIndex) => {
   const hardcodedAmount = 0.001;
 
   try {
+    const totalSupply = await cryptoBoysContract.methods.totalSupply().call();
 
     // Convert mintAmount to Wei by multiplying with 10^18
     const mintAmountWei = hardcodedAmount * punkIndex * 10**18;
@@ -300,15 +309,15 @@ transferPunk = async (addressTo, punkIndex) => {
 
 postregisterPartyAddresses = async (address, amount) => {
     alert(address);
-    const web3 = window.web3;
     try {
       const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
       const amount = 10; // Replace with the desired amount
 
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContractERC) {
-        const tx = await this.state.cryptoBoysContract.methods
-          .cryptoBoysContract(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount);
+        const tx = await this.state.cryptoBoysContractERC.methods
+          .registerPartyAddresses(this.state.accountAddress, addressTo, amount)
+          .send({ from: this.state.accountAddress });
 
         console.log('Transaction Hash:', tx.transactionHash);
       } else {
