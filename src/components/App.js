@@ -16,7 +16,7 @@ import Navbar from "./Navbar/Navbar";
 import MyCryptoBoys from "./MyCryptoBoys/MyCryptoBoys";
 import PunksForSale from "./PunksForSale/PunksForSale";
 import BuyPunk from "./BuyPunk/BuyPunk";
-import { BigInt } from 'global';
+import BigInt from 'big-integer';
 
 import {Contract} from "@ethersproject/contracts";
 
