@@ -166,6 +166,10 @@ class App extends Component {
             .balanceOf(this.state.accountAddress)
             .call();
 
+          const balanceOf = await erc20_smart_contract_interface.methods
+            .balanceOf(this.state.accountAddress)
+            .call();
+
           const totalTokensOwnedByAccount = await smart_contract_interface.methods
             .totalSupply()
             .call();
