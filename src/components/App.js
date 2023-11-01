@@ -136,7 +136,7 @@ class App extends Component {
           var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
-          const { abierc } = require('../abis/PepeToken.json');
+          const { abierc } = require('../abis/PEPEToken.json');
 
           var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
 
