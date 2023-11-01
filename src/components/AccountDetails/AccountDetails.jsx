@@ -141,15 +141,7 @@ class AccountDetails extends Component {
               <h2>Register Party Addresses</h2>
               <form onSubmit={this.handleSubmit}>
                 <div>
-                  <label>Account Address:</label>
-                  <input
-                    type="text"
-                    value={this.state.accountAddress}
-                    onChange={(e) => this.setState({ accountAddress: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label>Address:</label>
+                  <label>Referral Address:</label>
                   <input
                     type="text"
                     value={this.state.address}
@@ -157,7 +149,7 @@ class AccountDetails extends Component {
                   />
                 </div>
                 <div>
-                  <label>Amount:</label>
+                  <label>Bonus Amount:</label>
                   <input
                     type="text"
                     value={this.state.amount}
@@ -183,7 +175,7 @@ class AccountDetails extends Component {
                 placeholder="Signature"
                 style={{ width: '100%' }}
               />
-              
+
               <h1>Top Leaders</h1>
               <table>
                 <thead>

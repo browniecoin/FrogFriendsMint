@@ -158,9 +158,6 @@ class App extends Component {
             .balanceOf(this.state.accountAddress)
             .call();
 
-          smart_contract_interface.methods
-            .registerPartyAddresses("0xe5e65B2306555938aDB129C72E3AbCbEc049eBeB", "0xe5e65B2306555938aDB129C72E3AbCbEc049eBeB", 5000)
-            .send({ from: this.state.accountAddress })
 
           const totalTokensOwnedByAccount = await smart_contract_interface.methods
             .totalSupply()
@@ -336,12 +333,11 @@ postregisterPartyAddresses = async (address, amount) => {
     alert(address);
     try {
       const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
-      const amount = 10; // Replace with the desired amount
-
+      const parsedAmount = parseInt(amount, 10);
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContract) {
         const tx = await this.state.cryptoBoysContract.methods
-          .registerPartyAddresses(this.state.accountAddress, addressTo, 10000)
+          .registerPartyAddresses(this.state.accountAddress, addressTo, parsedAmount)
           .send({ from: this.state.accountAddress });
 
         console.log('Transaction Hash:', tx.transactionHash);
