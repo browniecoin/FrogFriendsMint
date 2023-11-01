@@ -35,7 +35,6 @@ class App extends Component {
       selectedpunkid: "",
       punksforsalebuttonhtml: "Load Punks",
       cryptoBoysContract: null,
-      cryptoBoysContractERC: null,
       cryptoBoysMarketContract: null,
       cryptoBoysCount: 0,
       cryptoPunksLoadCount: 1,
@@ -131,18 +130,12 @@ class App extends Component {
 //        if (networkData) {
           this.setState({ loading: true });
 
-          const { abierc } = require('../abis/PEPEToken.json');
+          const { abi } = require('../abis/PEPEToken.json');
 
-          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
-
-          const { abi } = require('../abis/FrogFriends.json');
-
-          var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
-
+          var smart_contract_interface = new web3.eth.Contract(abi, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
 
 
           const cryptoBoysContract = smart_contract_interface;
-          const cryptoBoysContractERC = erc20_smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
             Loot.abi,
@@ -157,13 +150,11 @@ class App extends Component {
 //      window.alert('Balance of MetaHuman' + balanceOfMH);
 
           this.setState({ cryptoBoysContract });
-          this.setState({ cryptoBoysContractERC });
 //          this.setState({ cryptoBoysMarketContract });
   	      this.setState({ contractDetected: true });
 
 
-
-          const balanceOf = await erc20_smart_contract_interface.methods
+          const balanceOf = await smart_contract_interface.methods
             .balanceOf(this.state.accountAddress)
             .call();
 
@@ -255,33 +246,23 @@ offerPunkForSale = async (punkIndex, punkPrice) => {
       });
 };
 claimPunk = async (punkIndex) => {
-  this.setState({ loading: true });
 
-  const cryptoBoysContract = this.state.cryptoBoysContract;
-  const accountAddress = this.state.accountAddress;
-  const hardcodedAmount = 0.001;
+  let totalSupply = await this.state.cryptoBoysContract.methods
+    .totalSupply()
+    .call();
 
-  try {
-    const totalSupply = await cryptoBoysContract.methods.totalSupply().call();
 
-    // Convert mintAmount to Wei by multiplying with 10^18
-    const mintAmountWei = hardcodedAmount * punkIndex * 10**18;
+    this.setState({ loading: true });
+      this.state.cryptoBoysContract.methods
+        .mint(punkIndex)
+        .send({ from: this.state.accountAddress})
+        .on("confirmation", () => {
+          localStorage.setItem(this.state.accountAddress, new Date().getTime());
+          this.setState({ loading: false });
+          window.location.reload();
+        });
 
-    await cryptoBoysContract.methods
-      .publicSaleMint(punkIndex)
-      .send({ from: accountAddress, value: mintAmountWei })
-      .on("confirmation", () => {
-        localStorage.setItem(accountAddress, new Date().getTime());
-        this.setState({ loading: false });
-        window.location.reload();
-      });
-  } catch (error) {
-    console.error("Error claiming punk:", error);
-    this.setState({ loading: false });
-  }
 };
-
-
 
 
 buyPunk = async (punkIndex, punkPrice) => {
@@ -307,29 +288,63 @@ transferPunk = async (addressTo, punkIndex) => {
         window.location.reload();
       });
 };
-
-postregisterPartyAddresses = async (address, amount) => {
-    alert(address);
-    try {
-      const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
-      const amount = 10; // Replace with the desired amount
-
-      // Make sure cryptoBoysContractERC is defined and accessible here
-      if (this.state.cryptoBoysContractERC) {
-        const tx = await this.state.cryptoBoysContractERC.methods
-          .registerPartyAddresses(this.state.accountAddress, addressTo, amount)
-          .send({ from: this.state.accountAddress });
-
-        console.log('Transaction Hash:', tx.transactionHash);
-      } else {
-        console.error('cryptoBoysContractERC is not defined');
-      }
-    } catch (error) {
-      console.error('Error sending the transaction:', error);
-    }
+loadMorePunks = async () => {
+  let incAmt = 8000;
+  for (let i = this.state.cryptoPunksLoadCount; i < this.state.cryptoPunksLoadCount + incAmt && i < 8000; i++) {
+    let punkOwner = await this.state.cryptoBoysContract.methods
+      .ownerOf(i)
+      .call();
+    this.state.cryptoBoys.push(punkOwner);
+    this.forceUpdate();
+  }
+  this.state.cryptoPunksLoadCount += incAmt;
 };
 
+loadMorePunks = async (from, to) => {
+  for (let i = from; i < to; i++) {
+    let punkOwner = await this.state.cryptoBoysContract.methods
+      .ownerOf(i)
+      .call();
+    this.state.cryptoBoys[i]=punkOwner;
+  }
+  this.forceUpdate();
+};
 
+loadPunksForSale = async () => {
+
+//  const mintBtn = document.getElementById("mintBtn25");
+//  mintBtn.disabled = true;
+  for (let i = this.state.cryptoPunksBuyLoadCount; i < 10000; i++) {
+    this.state.punksforsalebuttonhtml = "Loading " + i + " of 9999";
+    let punkOwner = await this.state.cryptoBoysContract.methods
+      .punksOfferedForSale(i)
+      .call();
+      const price = window.web3.utils.fromWei(punkOwner.minValue +'', "Ether");
+        this.state.cryptoBoysForSale[i]=price;
+        this.forceUpdate();
+      this.state.cryptoPunksBuyLoadCount += 1;
+  }
+  this.state.punksforsalebuttonhtml = "Done Loading";
+
+};
+
+loadPunksForSale = async (from, to) => {
+
+//  const mintBtn = document.getElementById("mintBtn25");
+//  mintBtn.disabled = true;
+  for (let i = from; i < to; i++) {
+    let punkOwner = await this.state.cryptoBoysContract.methods
+      .punksOfferedForSale(i)
+      .call();
+      const price = window.web3.utils.fromWei(punkOwner.minValue +'', "Ether");
+      if(price != 0x00){
+        this.state.cryptoBoysForSale[i]=price;
+        this.forceUpdate();
+      }
+  }
+  this.forceUpdate();
+
+};
 getPunkOwner = async (punkIndex) => {
     let punkOwner = await this.state.cryptoBoysContract.methods
       .punkIndexToAddress(punkIndex)
@@ -358,8 +373,6 @@ getPunkOwner = async (punkIndex) => {
                   <AccountDetails
                     accountAddress={this.state.accountAddress}
                     accountBalance={this.state.accountBalance}
-                    postregisterPartyAddresses={this.postregisterPartyAddresses}
-
                   />
                 )}
               />
@@ -460,11 +473,11 @@ getPunkOwner = async (punkIndex) => {
                   )}
               />
               <Route path='/nftrade' component={() => {
-                   window.location.href = 'https://www.dextools.io/app/en/ether/pair-explorer/0x8964557533b451d22ddf6d76898b4eba89f69141';
+                   window.location.href = '#';
                    return null;
               }}/>
               <Route path='/opensea' component={() => {
-                   window.location.href = 'https://opensea.io/collection/frogfriends-2';
+                   window.location.href = 'https://opensea.io/collection/brownie-coins';
                    return null;
               }}/>
 
