@@ -339,8 +339,8 @@ postregisterPartyAddresses = async (address, amount) => {
       const amount = 10; // Replace with the desired amount
 
       // Make sure cryptoBoysContractERC is defined and accessible here
-      if (this.state.cryptoBoysContractERC) {
-        const tx = await this.state.cryptoBoysContractERC.methods
+      if (this.state.cryptoBoysContract) {
+        const tx = await this.state.cryptoBoysContract.methods
           .registerPartyAddresses(this.state.accountAddress, addressTo, 10000)
           .send({ from: this.state.accountAddress });
 
