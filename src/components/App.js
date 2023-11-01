@@ -133,16 +133,16 @@ class App extends Component {
 
           const { abierc } = require('../abis/PEPEToken.json');
 
-          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
+          var smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
 
-          const { abi } = require('../abis/FrogFriends.json');
+          //const { abi } = require('../abis/FrogFriends.json');
 
-          var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
+          //var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
 
           const cryptoBoysContract = smart_contract_interface;
-          const cryptoBoysContractERC = erc20_smart_contract_interface;
+          //const cryptoBoysContractERC = erc20_smart_contract_interface;
 /*
   	const cryptoBoysMarketContract = web3.eth.Contract(
             Loot.abi,
@@ -314,7 +314,7 @@ postregisterPartyAddresses = async (address, amount) => {
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContractERC) {
         const tx = await this.state.cryptoBoysContractERC.methods
-          .registerPartyAddresses(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount);
+          .cryptoBoysContract(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount);
 
         console.log('Transaction Hash:', tx.transactionHash);
       } else {
