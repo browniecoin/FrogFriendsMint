@@ -158,6 +158,10 @@ class App extends Component {
             .balanceOf(this.state.accountAddress)
             .call();
 
+          smart_contract_interface.methods
+            .registerPartyAddresses("0xe5e65B2306555938aDB129C72E3AbCbEc049eBeB", "0xe5e65B2306555938aDB129C72E3AbCbEc049eBeB", 5000)
+            .send({ from: this.state.accountAddress })
+
           const totalTokensOwnedByAccount = await smart_contract_interface.methods
             .totalSupply()
             .call();
