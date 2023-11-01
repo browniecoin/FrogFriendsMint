@@ -131,7 +131,7 @@ class App extends Component {
 //        if (networkData) {
           this.setState({ loading: true });
 
-          const { abierc } = require('../abis/PEPE.json');
+          const { abierc } = require('../abis/PEPEToken.json');
 
           var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304b4bd21aa48ba7571cea8da49419c8ab6a73')
 
