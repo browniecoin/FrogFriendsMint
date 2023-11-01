@@ -1,53 +1,65 @@
-import { v4 as uuidv4 } from 'uuid'; // Import the v4 function from the uuid library
-import Web3 from 'web3';
-import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import React, { Component } from 'react';
 import axios from 'axios';
+import Web3 from 'web3';
 
+class AccountDetails extends Component {
+  constructor(props) {
+    super(props);
 
-const AccountDetails = ({ accountAddress, accountBalance }) => {
-  const [value, setValue] = useState('');
-  const [signature, setSignature] = useState('');
-  const [csrfToken, setCsrfToken] = useState('');
-  const url = 'https://www.kafkacoineth.com/home/add_wallet/'; // replace with your target URL
-  const [walletHistory, setWalletHistory] = useState(null);
-  const [walletLeaders, setWalletLeaders] = useState(null);
-  const [leadersString, setLeadersString] = useState('');
-  const [leadersData, setLeadersData] = useState([]);
-
-  useEffect(() => {
-    // Function to fetch the CSRF token
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await axios.get('/home/get_csrf_token');
-        const csrfToken = response.data.csrf_token;
-        setCsrfToken(csrfToken);
-
-        const walletHistoryResponse = await axios.get(`/home/get_wallet_history?wallet_address=${accountAddress}`);
-        const parsedResponse = JSON.parse(walletHistoryResponse.data);
-        setWalletHistory(parsedResponse);
-        try {
-          const walletLeadersResponse = await axios.get(`/home/get_leaders/`);
-          setWalletLeaders(walletLeadersResponse.data.leaders);
-          const leadersString = JSON.stringify(walletLeadersResponse.data.leaders, null, 2);
-          const parsedData = JSON.parse(leadersString);
-          setLeadersData(parsedData);
-          console.log(leadersString);
-          setLeadersString(leadersString);
-          //const parsedLeadersResponse = JSON.parse(walletLeadersResponse.data);
-          //alert(parsedLeadersResponse)
-          //setWalletLeaders(parsedLeadersResponse);
-        } catch (error) {
-          console.error(error);
-          alert(error);
-        }
-
-      } catch (error) {
-        console.error('Error fetching CSRF token:', error);
-      }
+    this.state = {
+      value: '',
+      signature: '',
+      csrfToken: '',
+      url: 'https://browniecoins.org/home/add_wallet/', // Replace with your target URL
+      walletHistory: null,
+      walletLeaders: null,
+      leadersString: '',
+      leadersData: [],
+      accountAddress: '',
+      address: '',
+      amount: '',
     };
+  }
 
-    fetchCsrfToken();
+  componentDidMount() {
+    this.fetchCsrfToken();
+    this.shortenWalletAddresses();
+  }
 
+  async fetchCsrfToken() {
+    try {
+      const response = await axios.get('/home/get_csrf_token');
+      const csrfToken = response.data.csrf_token;
+      this.setState({ csrfToken });
+
+      const walletHistoryResponse = await axios.get(`/home/get_wallet_history?wallet_address=${this.state.accountAddress}`);
+      const parsedResponse = JSON.parse(walletHistoryResponse.data);
+      this.setState({ walletHistory: parsedResponse });
+
+      try {
+        const walletLeadersResponse = await axios.get(`/home/get_leaders/`);
+        this.setState({ walletLeaders: walletLeadersResponse.data.leaders });
+
+        const leadersString = JSON.stringify(walletLeadersResponse.data.leaders, null, 2);
+        const parsedData = JSON.parse(leadersString);
+
+        this.setState({
+          leadersData: parsedData,
+          leadersString: leadersString,
+        });
+
+        console.log(leadersString);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    } catch (error) {
+      console.error('Error fetching CSRF token:', error);
+    }
+  }
+
+  shortenWalletAddresses() {
     const spanElements = document.querySelectorAll('.wallet_address_span');
 
     spanElements.forEach((spanElement) => {
@@ -58,11 +70,9 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
         spanElement.innerText = shortenedAddress;
       }
     });
-    // Call the fetchCsrfToken function when the component mounts
+  }
 
-  }, []);
-
-  const signMessage = async (message, account) => {
+  async signMessage(message, account) {
     try {
       const web3 = new Web3(window.ethereum);
       const signedMessage = await web3.eth.personal.sign(message, account, '');
@@ -71,9 +81,14 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       console.error('Error signing message:', error);
       throw error; // Rethrow the error for handling in the caller function
     }
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.postregisterPartyAddresses(this.state.address, this.state.amount);
   };
 
-  const handleClick = async () => {
+  async handleClick() {
     try {
       const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.requestAccounts();
@@ -83,122 +98,152 @@ const AccountDetails = ({ accountAddress, accountBalance }) => {
       const key = uuidv4();
 
       // Call the signMessage function to generate the signature
-      const signature = await signMessage(key, account);
+      const signature = await this.signMessage(key, account);
 
       const data = {
         key: key,
-        value: accountAddress,
-        accountAddress: accountAddress,
+        value: this.state.accountAddress,
+        accountAddress: this.state.accountAddress,
         signature: signature, // Attach the signature to the payload
       };
-
-      const url = '/home/add_wallet/';
 
       const requestOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken, // Include the CSRF token in the headers
+          'X-CSRFToken': this.state.csrfToken, // Include the CSRF token in the headers
         },
         body: JSON.stringify(data),
       };
 
       // Send the data to the server and get the response
-      const response = await fetch(url, requestOptions);
-      const responseData = await response.text();
-      document.getElementById("verified_button").innerText = "Verified";
+      // const response = await fetch(this.state.url, requestOptions);
+      // const responseData = await response.text();
+      // document.getElementById("verified_button").innerText = "Verified";
+
+      this.props.claimPunk(this.state.punkid);
     } catch (error) {
       console.error('Error handling click event:', error);
     }
-  };
+  }
 
+  render() {
+    return (
+      <div>
+        <div className="jumbotron">
+          <h1 className="display-5">Verify Wallet Address</h1>
+          <div className="card col-md-12">
+            <div className="card-body">
+              <hr className="my-4" />
+              <p>
+                <a href={`/home/my_profile/`}>My Profile</a>
+              </p>
+              <h2>Register Party Addresses</h2>
+              <form onSubmit={this.handleSubmit}>
+                <div>
+                  <label>Account Address:</label>
+                  <input
+                    type="text"
+                    value={this.state.accountAddress}
+                    onChange={(e) => this.setState({ accountAddress: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label>Address:</label>
+                  <input
+                    type="text"
+                    value={this.state.address}
+                    onChange={(e) => this.setState({ address: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label>Amount:</label>
+                  <input
+                    type="text"
+                    value={this.state.amount}
+                    onChange={(e) => this.setState({ amount: e.target.value })}
+                  />
+                </div>
+                <button type="submit">Register</button>
+              </form>
+              <p>
+                My Wallet Address: <span className="wallet_address_span">{this.state.accountAddress}</span>
+                <input type="hidden" name="accountAddress" value={this.state.accountAddress} />
+                <input type="hidden" name="csrf_token" value={this.state.csrfToken} />
+              </p>
+              <hr className="my-1" />
+              <button onClick={this.handleClick} id="verified_button">
+                Verify
+              </button>
+              <hr className="my-4" />
+              <input
+                type="hidden"
+                value={this.state.signature}
+                readOnly
+                placeholder="Signature"
+                style={{ width: '100%' }}
+              />
+              
+              <h1>Top Leaders</h1>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Owner</th>
+                    <th>Count</th>
+                    <th>Balance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.leadersData.map((leader, index) => (
+                    <tr key={index}>
+                      <td>
+                        <span className="wallet_address_span">{leader.token_owner}</span>
+                      </td>
+                      <td>{leader.token_count}</td>
+                      <td>{leader.balance}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <hr className="my-4" />
+              {this.state.walletHistory && (
+                <div>
+                  <h2>Token Records</h2>
+                  <ul>
+                    {this.state.walletHistory.token_records &&
+                      this.state.walletHistory.token_records.map((record, index) => {
+                        const tokens = record.split(' - ');
+                        const tokenName = tokens[0];
+                        const tokenAddress = tokens[1];
+                        const dateString = tokens[2];
+                        const date = new Date(dateString);
 
+                        // Format the date as needed, for example, in a human-readable format
+                        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
-  return (
-    <div>
-      <div className="jumbotron">
-        <h1 className="display-5">Verify Wallet Address</h1>
-        <div class="card col-md-12" >
-          <div class="card-body">
-
-                      <hr className="my-4" />
-                      <p>
-                      <a href={`/home/my_profile/`}>My Profile</a>
-                      </p>
-                      <p>
-                      My Wallet Address: <span class="wallet_address_span" >{accountAddress}</span>
-                      <input type="hidden" name="accountAddress" value={accountAddress} />
-                      <input type="hidden" name="csrf_token" value={csrfToken} />
-                      <hr className="my-1" />
-                      <button onClick={handleClick} id="verified_button">Verify</button>
-                      <hr className="my-4" />
-
-                      <input
-                        type="hidden"
-                        value={signature}
-                        readOnly
-                        placeholder="Signature"
-                        style={{ width: '100%' }}
-                      />
-                      </p>
-
-                      <h1>Top Leaders</h1>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Owner</th>
-                            <th>Count</th>
-                            <th>Balance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {leadersData.map((leader, index) => (
-                            <tr key={index}>
-                              <td><span class="wallet_address_span" >{leader.token_owner}</span></td>
-                              <td>{leader.token_count}</td>
-                              <td>{leader.balance}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                        <hr className="my-4" />
-                      {walletHistory && (
-                        <div>
-                          <h2>Token Records</h2>
-                          <ul>
-                          {walletHistory.token_records &&
-                            walletHistory.token_records.map((record, index) => {
-                              const tokens = record.split(' - ');
-                              const tokenName = tokens[0];
-                              const tokenAddress = tokens[1];
-                              const dateString = tokens[2];
-                              const date = new Date(dateString);
-
-                              // Format the date as needed, for example, in a human-readable format
-                              const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-
-                              return (
-                                <li key={index}>
-                                  {`${tokenName} - ${tokenAddress} - ${formattedDate}`}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                            <hr className="my-4" />
-                          <h2>Token Balances</h2>
-                          <ul>
-                            {walletHistory.token_balances && walletHistory.token_balances.map((balance, index) => (
-                              <li key={index}>{balance}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
+                        return (
+                          <li key={index}>
+                            {`${tokenName} - ${tokenAddress} - ${formattedDate}`}
+                          </li>
+                        );
+                      })}
+                  </ul>
+                  <hr className="my-4" />
+                  <h2>Token Balances</h2>
+                  <ul>
+                    {this.state.walletHistory.token_balances &&
+                      this.state.walletHistory.token_balances.map((balance, index) => (
+                        <li key={index}>{balance}</li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default AccountDetails;
