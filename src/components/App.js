@@ -253,8 +253,7 @@ claimPunk = async (punkIndex) => {
   const hardcodedAmount = 0.001;
 
   try {
-    const totalSupply = await cryptoBoysContract.methods.totalSupply().call();
-
+  
     // Convert mintAmount to Wei by multiplying with 10^18
     const mintAmountWei = hardcodedAmount * punkIndex * 10**18;
 
