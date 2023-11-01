@@ -158,6 +158,7 @@ class AccountDetails extends Component {
                 </div>
                 <button type="submit">Register</button>
               </form>
+              <hr className="my-5" />
               <p>
                 My Wallet Address: <span className="wallet_address_span">{this.state.accountAddress}</span>
                 <input type="hidden" name="accountAddress" value={this.state.accountAddress} />
