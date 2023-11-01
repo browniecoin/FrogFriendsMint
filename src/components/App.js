@@ -162,17 +162,14 @@ class App extends Component {
   	      this.setState({ contractDetected: true });
 
 
-        
 
-          const totalTokensOwnedByAccount = await smart_contract_interface.methods
-            .totalSupply()
-            .call();
+
           let punkOwners = [];
           this.state.cryptoBoys = punkOwners;
           this.state.cryptoBoysForSale = [];
           this.state.balanceOf  =  "";
           this.state.punksforsalebuttonhtml = "Load Punks";
-          this.state.totalTokensOwnedByAccount = totalTokensOwnedByAccount + "";
+          this.state.totalTokensOwnedByAccount = "";
 
 
 //          (async () => {
