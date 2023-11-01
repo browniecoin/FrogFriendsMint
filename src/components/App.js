@@ -253,7 +253,7 @@ claimPunk = async (punkIndex) => {
   const hardcodedAmount = 0.001;
 
   try {
-  
+
     // Convert mintAmount to Wei by multiplying with 10^18
     const mintAmountWei = hardcodedAmount * punkIndex * 10**18;
 
@@ -307,7 +307,7 @@ postregisterPartyAddresses = async (address, amount) => {
 
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContractERC) {
-        const tx = await this.state.cryptoBoysContractERC.methods
+        const tx = await this.state.cryptoBoysContract.methods
           .cryptoBoysContract(web3.utils.toChecksumAddress(this.state.accountAddress), web3.utils.toChecksumAddress(addressTo), amount);
 
         console.log('Transaction Hash:', tx.transactionHash);
