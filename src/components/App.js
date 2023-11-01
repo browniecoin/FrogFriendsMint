@@ -495,11 +495,11 @@ getPunkOwner = async (punkIndex) => {
                   )}
               />
               <Route path='/nftrade' component={() => {
-                   window.location.href = '#';
+                   window.location.href = 'https://www.dextools.io/app/en/ether/pair-explorer/0x8964557533b451d22ddf6d76898b4eba89f69141';
                    return null;
               }}/>
               <Route path='/opensea' component={() => {
-                   window.location.href = 'https://opensea.io/collection/brownie-coins';
+                   window.location.href = 'https://opensea.io/collection/frogfriends-2';
                    return null;
               }}/>
 
