@@ -131,14 +131,15 @@ class AccountDetails extends Component {
     return (
       <div>
         <div className="jumbotron">
-          <h1 className="display-5">PEPE Referral Program for Brownie Coin</h1>
+          <h1 className="display-5">
+          Unlock Unlimited Earnings with PEPE Marketing's Multi-Level Referral Program!</h1>
           <div className="card col-md-12">
             <div className="card-body">
               <hr className="my-4" />
               <p>
                 <a href={`/home/my_profile/`}>My Profile</a>
               </p>
-              <h2>Register Party Addresses</h2>
+              <h2>Referral Addresses</h2>
               <form onSubmit={this.handleSubmit}>
                 <div>
                   <label>Referral Address:</label>
@@ -148,7 +149,7 @@ class AccountDetails extends Component {
                     onChange={(e) => this.setState({ address: e.target.value })}
                   />
                 </div>
-                <div>
+                <div className="mt-3">
                   <label>Bonus Amount:</label>
                   <input
                     type="text"
