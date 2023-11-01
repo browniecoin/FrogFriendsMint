@@ -131,14 +131,15 @@ class App extends Component {
 //        if (networkData) {
           this.setState({ loading: true });
 
+          const { abierc } = require('../abis/PEPEToken.json');
+
+          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
+
           const { abi } = require('../abis/FrogFriends.json');
 
           var smart_contract_interface = new web3.eth.Contract(abi, '0x9d741c5DFb12870477C48E7F03c0265896c01Fd0')
 
 
-          const { abierc } = require('../abis/PEPE.json');
-
-          var erc20_smart_contract_interface = new web3.eth.Contract(abierc, '0x97304B4BD21Aa48Ba7571cea8DA49419C8ab6a73')
 
           const cryptoBoysContract = smart_contract_interface;
           const cryptoBoysContractERC = erc20_smart_contract_interface;
@@ -175,9 +176,6 @@ class App extends Component {
           this.state.punksforsalebuttonhtml = "Load Punks";
           this.state.totalTokensOwnedByAccount = totalTokensOwnedByAccount + "";
 
-          for (let i = 0; i < 8000; i++) {
-              this.state.cryptoBoys[i]=0x00;
-          }
 
 //          (async () => {
 //              await this.loadMorePunks(0,8000);
