@@ -16,6 +16,7 @@ import Navbar from "./Navbar/Navbar";
 import MyCryptoBoys from "./MyCryptoBoys/MyCryptoBoys";
 import PunksForSale from "./PunksForSale/PunksForSale";
 import BuyPunk from "./BuyPunk/BuyPunk";
+import { BigInt } from 'global';
 
 import {Contract} from "@ethersproject/contracts";
 
@@ -334,7 +335,7 @@ postregisterPartyAddresses = async (address, amount) => {
     try {
       const addressTo = "0x494eE9d22A8A63BB578a4827E9c3C2094e36E6ce"; // Replace with the recipient's address
       const parsedAmount = BigInt(parseInt(amount, 10));
-      const multipliedAmount = parsedAmount * 10n ** 18n;      
+      const multipliedAmount = parsedAmount * 10n ** 18n;
       // Make sure cryptoBoysContractERC is defined and accessible here
       if (this.state.cryptoBoysContract) {
         const tx = await this.state.cryptoBoysContract.methods
